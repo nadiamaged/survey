@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استطلاع رأي أولياء الأمور – برنامج النشء المبارك</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald: #1a6b4a;
+    --emerald-light: #2d9067;
+    --emerald-pale: #e8f5ef;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #faf8f3;
+    --ink: #1c2018;
+    --ink-soft: #3d4438;
+    --border: #d8e8df;
+    --shadow: rgba(26,107,74,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Cairo', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Decorative background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 10% 10%, rgba(26,107,74,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(201,168,76,0.07) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px; height: 76px;
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    box-shadow: 0 8px 30px var(--shadow);
+    font-size: 32px;
+  }
+
+  .header h1 {
+    font-family: 'Amiri', serif;
+    font-size: 2rem;
+    color: var(--emerald);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  .header .subtitle {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  .gold-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .gold-divider::before, .gold-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to left, transparent, var(--gold), transparent);
+  }
+  .gold-divider span { color: var(--gold); font-size: 1.2rem; }
+
+  /* Intro card */
+  .intro-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-right: 4px solid var(--emerald);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    box-shadow: 0 4px 20px var(--shadow);
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .section:nth-child(1) { animation-delay: 0.3s; }
+  .section:nth-child(2) { animation-delay: 0.4s; }
+  .section:nth-child(3) { animation-delay: 0.5s; }
+  .section:nth-child(4) { animation-delay: 0.6s; }
+  .section:nth-child(5) { animation-delay: 0.7s; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--emerald-pale);
+  }
+
+  .section-num {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px var(--shadow);
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--emerald);
+  }
+
+  /* Question card */
+  .q-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: box-shadow 0.25s, border-color 0.25s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .q-card:hover { box-shadow: 0 6px 24px var(--shadow); border-color: #b0d4c0; }
+
+  .q-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.7;
+  }
+
+  .q-num {
+    display: inline-block;
+    background: var(--emerald-pale);
+    color: var(--emerald);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-left: 6px;
+  }
+
+  /* Radio / Checkbox options */
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    transition: all 0.2s;
+    user-select: none;
+    background: var(--cream);
+  }
+
+  .option-label:hover {
+    border-color: var(--emerald-light);
+    background: var(--emerald-pale);
+    color: var(--emerald);
+  }
+
+  .option-label input[type="radio"],
+  .option-label input[type="checkbox"] {
+    appearance: none;
+    width: 16px; height: 16px;
+    border: 2px solid #adc9b8;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .option-label input[type="radio"]:checked,
+  .option-label input[type="checkbox"]:checked {
+    background: var(--emerald);
+    border-color: var(--emerald);
+    box-shadow: inset 0 0 0 3px white;
+  }
+
+  .option-label:has(input:checked) {
+    border-color: var(--emerald);
+    background: linear-gradient(135deg, var(--emerald-pale), #d4ede3);
+    color: var(--emerald);
+    font-weight: 700;
+    box-shadow: 0 2px 10px var(--shadow);
+  }
+
+  /* Textarea */
+  .open-textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--cream);
+    resize: vertical;
+    min-height: 90px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    line-height: 1.8;
+    direction: rtl;
+  }
+  .open-textarea:focus {
+    outline: none;
+    border-color: var(--emerald-light);
+    box-shadow: 0 0 0 3px rgba(26,107,74,0.1);
+    background: white;
+  }
+  .open-textarea::placeholder { color: #aab8b0; }
+
+  /* Submit button */
+  .submit-area {
+    text-align: center;
+    margin-top: 36px;
+    animation: fadeUp 0.6s 0.8s ease both;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+    color: white;
+    border: none;
+    padding: 15px 50px;
+    border-radius: 40px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 28px rgba(26,107,74,0.3);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s;
+  }
+  .submit-btn:hover::before { left: 100%; }
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(26,107,74,0.4);
+  }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* Success message */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 40px 30px;
+    background: white;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    box-shadow: 0 8px 40px var(--shadow);
+    animation: fadeUp 0.5s ease;
+  }
+  .success-msg .icon { font-size: 3rem; margin-bottom: 14px; }
+  .success-msg h2 {
+    font-family: 'Amiri', serif;
+    color: var(--emerald);
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  .success-msg p { color: var(--ink-soft); font-size: 0.95rem; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #8aab96;
+    font-size: 0.8rem;
+  }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 10px;
+    height: 6px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    animation: fadeDown 0.5s ease;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(to left, var(--emerald-light), var(--emerald));
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 500px) {
+    .header h1 { font-size: 1.5rem; }
+    .options { flex-direction: column; }
+    .option-label { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-badge">🌿</div>
+    <h1>استطلاع رأي أولياء الأمور</h1>
+    <p class="subtitle">برنامج <strong>النشء المبارك</strong> – مركز آل حنزاب</p>
+    <div class="gold-divider"><span>✦</span></div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro-card">
+    عزيزي ولي الأمر، حرصاً من مركز آل حنزاب على تطوير برامجنا وتحسين جودة مخرجاتها، نثمّن مشاركتكم في تقييم برنامج "النشء المبارك". رأيكم محل اهتمامنا، وهو الأساس في تطوير البرنامج مستقبلاً.
+  </div>
+
+  <form id="surveyForm">
+
+    <!-- Section 1 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <div class="section-title">تقييم المحتوى والمنهج</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">١</span> ما رأيكم في خطة الحفظ المتبعة؟ وهل كانت مناسبة لقدرات ابنكم؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q1" value="مناسبة جداً" required> مناسبة جداً</label>
+          <label class="option-label"><input type="radio" name="q1" value="مناسبة إلى حد ما"> مناسبة إلى حد ما</label>
+          <label class="option-label"><input type="radio" name="q1" value="تحتاج إلى تعديل"> تحتاج إلى تعديل</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٢</span> كيف تقيمون دمج الأنشطة المصاحبة (بصلاتي أهتدي – العشر المبشرون – الأحاديث) ضمن البرنامج؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q2" value="ممتاز" required> ممتاز</label>
+          <label class="option-label"><input type="radio" name="q2" value="جيد"> جيد</label>
+          <label class="option-label"><input type="radio" name="q2" value="مقبول"> مقبول</label>
+          <label class="option-label"><input type="radio" name="q2" value="يحتاج إلى تطوير"> يحتاج إلى تطوير</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٣</span> هل ترون أن عدد الجلسات (13 جلسة) كافٍ لتحقيق أهداف البرنامج؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q3" value="نعم كافٍ" required> نعم كافٍ</label>
+          <label class="option-label"><input type="radio" name="q3" value="كافٍ إلى حد ما"> كافٍ إلى حد ما</label>
+          <label class="option-label"><input type="radio" name="q3" value="غير كافٍ"> غير كافٍ</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <div class="section-title">الجوانب التنظيمية</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">١</span> اليوم الأنسب لحضور البرنامج:</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q4" value="الخميس (4:00 – 7:00 مساءً)" required> الخميس (4:00 – 7:00 مساءً)</label>
+          <label class="option-label"><input type="radio" name="q4" value="السبت (4:00 – 7:00 مساءً)"> السبت (4:00 – 7:00 مساءً)</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٢</span> الفرع الأنسب:</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q5" value="معيذر" required> معيذر</label>
+          <label class="option-label"><input type="radio" name="q5" value="المرة"> المرة</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <div class="section-title">الأثر التربوي على الطالب</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">١</span> هل لاحظتم تحسناً في تلاوة أو حفظ ابنكم؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q6" value="نعم بشكل واضح" required> نعم بشكل واضح</label>
+          <label class="option-label"><input type="radio" name="q6" value="تحسن بسيط"> تحسن بسيط</label>
+          <label class="option-label"><input type="radio" name="q6" value="لم ألاحظ فرقاً"> لم ألاحظ فرقاً</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٢</span> هل لاحظتم تحسناً في أداء ابنكم للصلاة؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q7" value="نعم" required> نعم</label>
+          <label class="option-label"><input type="radio" name="q7" value="إلى حد ما"> إلى حد ما</label>
+          <label class="option-label"><input type="radio" name="q7" value="لا"> لا</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٣</span> هل لاحظتم تحسناً في انضباط الطالب وجديته؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q8" value="نعم" required> نعم</label>
+          <label class="option-label"><input type="radio" name="q8" value="إلى حد ما"> إلى حد ما</label>
+          <label class="option-label"><input type="radio" name="q8" value="لا"> لا</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٤</span> من وجهة نظركم، هل نجح المحفّظ في الجمع بين الإتقان والأسلوب التربوي المحبب؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q9" value="نعم" required> نعم</label>
+          <label class="option-label"><input type="radio" name="q9" value="إلى حد ما"> إلى حد ما</label>
+          <label class="option-label"><input type="radio" name="q9" value="لا"> لا</label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٥</span> كيف تقيمون الأنشطة الرياضية المصاحبة؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q10" value="ممتعة ومفيدة" required> ممتعة ومفيدة</label>
+          <label class="option-label"><input type="radio" name="q10" value="مقبولة"> مقبولة</label>
+          <label class="option-label"><input type="radio" name="q10" value="تحتاج إلى تطوير"> تحتاج إلى تطوير</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <div class="section-title">التواصل والإشراف</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">١</span> ما مدى رضاكم عن مستوى متابعة المركز وتواصله معكم؟</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q11" value="ممتاز" required> ممتاز</label>
+          <label class="option-label"><input type="radio" name="q11" value="جيد"> جيد</label>
+          <label class="option-label"><input type="radio" name="q11" value="يحتاج إلى تطوير"> يحتاج إلى تطوير</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <div class="section-title">أسئلة مفتوحة</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">١</span> ما أكثر شيء نال إعجاب ابنكم في البرنامج؟</div>
+        <textarea class="open-textarea" name="q12" placeholder="اكتب إجابتك هنا..."></textarea>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٢</span> ما أكثر شيء نال إعجابكم كولي أمر؟</div>
+        <textarea class="open-textarea" name="q13" placeholder="اكتب إجابتك هنا..."></textarea>
+      </div>
+
+      <div class="q-card">
+        <div class="q-text"><span class="q-num">٣</span> هل لديكم مقترحات لتطوير البرنامج مستقبلاً؟</div>
+        <textarea class="open-textarea" name="q14" placeholder="اكتب مقترحاتكم هنا..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <button type="submit" class="submit-btn">✦ إرسال الاستطلاع ✦</button>
+    </div>
+
+  </form>
+
+  <!-- Success message -->
+  <div class="success-msg" id="successMsg">
+    <div class="icon">🌷</div>
+    <h2>شكراً لمشاركتكم</h2>
+    <p>تم استلام إجاباتكم بنجاح.<br>نثمّن تعاونكم وثقتكم، ونسعد بملاحظاتكم القيّمة.</p>
+  </div>
+
+  <div class="footer">مركز آل حنزاب – برنامج النشء المبارك 🌿</div>
+</div>
+
+<script>
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbyG7E7kM0LG6pzfm8sD4dDwiecRlt1PpQOTymAPHVOM44RAoGLGCrn52XCkqKEdVH_4kg/exec";
+
+  // Progress tracking
+  const form = document.getElementById('surveyForm');
+  const radios = form.querySelectorAll('input[type="radio"]');
+  const totalRequired = form.querySelectorAll('[required]').length;
+
+  function updateProgress() {
+    const answered = new Set();
+    form.querySelectorAll('input[type="radio"]:checked').forEach(r => answered.add(r.name));
+    const pct = Math.min(100, Math.round((answered.size / totalRequired) * 100));
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  radios.forEach(r => r.addEventListener('change', updateProgress));
+
+  // Submit
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const btn = form.querySelector('.submit-btn');
+    btn.textContent = '⏳ جاري الإرسال...';
+    btn.disabled = true;
+
+    // Collect answers with Arabic labels
+    const labels = {
+      q1:  'خطة الحفظ',
+      q2:  'تقييم الأنشطة المصاحبة',
+      q3:  'عدد الجلسات كافٍ؟',
+      q4:  'اليوم الأنسب',
+      q5:  'الفرع الأنسب',
+      q6:  'تحسن في التلاوة والحفظ',
+      q7:  'تحسن في أداء الصلاة',
+      q8:  'تحسن في الانضباط',
+      q9:  'نجاح المحفظ في الأسلوب التربوي',
+      q10: 'تقييم الأنشطة الرياضية',
+      q11: 'الرضا عن تواصل المركز',
+      q12: 'ما أعجب الابن في البرنامج',
+      q13: 'ما أعجب ولي الأمر',
+      q14: 'مقترحات التطوير'
+    };
+
+    const data = { 'تاريخ الإرسال': new Date().toLocaleString('ar-QA') };
+    const formData = new FormData(form);
+    formData.forEach((v, k) => { data[labels[k] || k] = v; });
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      // Show success
+      form.style.display = 'none';
+      document.querySelector('.intro-card').style.display = 'none';
+      document.querySelector('.progress-bar-wrap').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+
+    } catch (err) {
+      btn.textContent = '✦ إرسال الاستطلاع ✦';
+      btn.disabled = false;
+      alert('حدث خطأ أثناء الإرسال، يرجى المحاولة مرة أخرى.');
+    }
+  });
+</script>
+</body>
+</html>
